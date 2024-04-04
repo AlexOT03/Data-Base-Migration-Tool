@@ -11,6 +11,7 @@ class MainLayout(tk.Tk):
     def __init__(self):
         super().__init__()
         config_window(self)
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.sqls_connect = None
         self.mysql_connect = None
 
@@ -342,3 +343,19 @@ class MainLayout(tk.Tk):
             tables = mysql_db.get_mysql_tables(self.mysql_connect, db)
             for table in tables:
                 self.tree_mysql.insert(db_id, tk.END, text=table)
+    
+    def on_closing(self):
+        close = messagebox.askyesno("Close App?", "Are you sure to close the app?")
+
+        if close:
+            if self.sqls_connect is not None and self.mysql_connect is not None:
+                sqls_conn.close_sqls_conn(self.sqls_connect)
+                mysql_conn.close_mysql_conn(self.mysql_connect)
+            elif self.sqls_connect is not None:
+                sqls_conn.close_sqls_conn(self.sqls_connect)
+            elif self.mysql_connect is not None:
+                mysql_conn.close_mysql_conn(self.mysql_connect)
+            else:
+                ...
+            self.destroy()
+
