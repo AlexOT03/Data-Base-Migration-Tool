@@ -78,13 +78,13 @@ class MainLayout(tk.Tk):
         self.entry_mysql_password.grid(row=3, column=3, padx=10, pady=5)
 
         self.separator = ttk.Separator(self.master_frame, orient='horizontal')
-        self.separator.pack(fill='x')
+        self.separator.pack(anchor='s', fill='x')
 
         self.exit_btn = ttk.Button(self.master_frame, text="Connect", command=self.connect_servers)
-        self.exit_btn.pack(side='right', padx=5, pady=5)  # Alinea a la derecha
+        self.exit_btn.pack(anchor='se', side='right', padx=5, pady=5)  # Alinea a la derecha
 
         self.conn_btn = ttk.Button(self.master_frame, text="Exit", command=self.destroy)
-        self.conn_btn.pack(side='right', padx=5, pady=5)  # Alinea a la derecha
+        self.conn_btn.pack(anchor='se', side='right', padx=5, pady=5)  # Alinea a la derecha
 
 
     def win_auth(self):
@@ -167,11 +167,11 @@ class MainLayout(tk.Tk):
         self.run_btn.pack(padx=10, pady=10)
 
         self.int_console = tk.Text(self.frame1, height=3)
-        self.int_console.pack(padx=10, pady=10)
+        self.int_console.pack(padx=10, pady=10, fill='both', expand=True)
 
         self.colums = tk.Variable()
-        self.out_table = ttk.Treeview(self.frame1, height=5)
-        self.out_table.pack(padx=10, pady=(0, 10), fill='x')
+        self.out_table = ttk.Treeview(self.frame1, height=5, show='headings')
+        self.out_table.pack(padx=10, pady=(0, 10), fill='both', expand=True)
 
         self.notebook2 = ttk.Notebook(self.frame2)
         self.notebook2.pack(padx=10, pady=10, fill='both', expand=True)
@@ -269,52 +269,89 @@ class MainLayout(tk.Tk):
             messagebox.showwarning("warning", "The database name isnt same!")
         
 
+    def clear_table(self):
+        for child in self.out_table.get_children():
+            self.out_table.delete(child)
+
+    def setup_columns(self, num_columns, table_name):
+        if num_columns and table_name:
+            first_values = [t[0] for t in table_name]
+            self.out_table['columns'] = list(range(num_columns))
+            for col in range(num_columns):
+                self.out_table.heading(col, text=f"{first_values[col]}")
+                self.out_table.column(col, stretch=True)
+        self.out_table.heading("#0", text="")
+    
+    def get_table_name_mysql(self, query, connection):
+        databases = mysql_conn.get_mysql_dbs(connection)
+        db_name = None
+
+        for db_name in databases:
+            if db_name in query:
+                break
+        else:
+            return "No se encontró el nombre de la base de datos en la consulta."
+
+        tables = mysql_db.get_mysql_tables(connection, db_name)
+        table_name = None
+
+        for table_name in tables:
+            if table_name in query:
+                break
+        else:
+            return "No se encontró el nombre de la tabla en la consulta."
+        
+        name, _, _ = mysql_db.get_mysql_table_structure(connection, table_name)
+
+        return name
+
+
+    def get_table_name_sqls(self, query, connection) -> str:
+        databases = sqls_conn.get_sqls_dbs(connection)
+        db_name = None
+        
+        for db_name in databases:
+            if db_name in query:
+                break
+        else:
+            return "No se encontró el nombre de la base de datos en la consulta."
+    
+        tables = sqls_db.get_sql_server_tables(connection, db_name)
+        table_name = None
+        
+        for table_name in tables:
+            if table_name in query:
+                break
+        else:
+            return "No se encontró el nombre de la tabla en la consulta."
+
+        name, _, _ = sqls_db.get_sql_server_table_structure(connection, table_name)
+        return name
+
+
     def run_query(self):
         query = self.int_console.get("1.0", tk.END)
-        if self.dbs_var.get() == "SQL Server":
+        db_type = self.dbs_var.get()
+
+        if db_type == "SQL Server":
+            name_table = self.get_table_name_sqls(query, self.sqls_connect)
             out_text = sqls_conn.sqls_query(self.sqls_connect, query)
-            # Limpiar datos previos en la tabla
-            for child in self.out_table.get_children():
-                self.out_table.delete(child)
-
-            # Configurar columnas
-            if out_text:  # Verificar si hay datos
-                columns = list(range(len(out_text[0])))
-                self.out_table['columns'] = columns
-                for col in columns:
-                    self.out_table.heading(col, text="Column " + str(col + 1))
-                for col in columns:
-                    self.out_table.column(col, width=100)
-
-            # Agregar una columna adicional para manejar el espacio en blanco
-            self.out_table.heading("#0", text="")
-
-            # Insertar datos en la tabla
-            for row in out_text:
-                self.out_table.insert("", "end", values=row)
-
-        elif self.dbs_var.get() == "MySQL":
+        elif db_type == "MySQL":
+            name_table = self.get_table_name_mysql(query, self.mysql_connect)
             out_text = mysql_conn.mysql_query(self.mysql_connect, query)
-            for child in self.out_table.get_children():
-                self.out_table.delete(child)
-
-            # Configurar columnas
-            if out_text:  # Verificar si hay datos
-                columns = list(range(len(out_text[0])))
-                self.out_table['columns'] = columns
-                for col in columns:
-                    self.out_table.heading(col, text="Column " + str(col + 1))
-                for col in columns:
-                    self.out_table.column(col, width=100)
-
-            # Agregar una columna adicional para manejar el espacio en blanco
-            self.out_table.heading("#0", text="")
-
-            # Insertar datos en la tabla
-            for row in out_text:
-                self.out_table.insert("", "end", values=row)
         else:
             messagebox.showerror("Error", "No database type selected")
+            return
+
+        self.clear_table()
+
+        if out_text:
+            num_columns = len(out_text[0])
+            self.setup_columns(num_columns, name_table)
+
+            for row in out_text:
+                self.out_table.insert("", "end", values=row)
+
     
     def select_sql_dbs(self, connect):
         self.update_sql_dbs()
