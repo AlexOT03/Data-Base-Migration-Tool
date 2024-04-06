@@ -64,9 +64,9 @@ This development journey not only taught me about the importance of a strong cod
 
 ## Feedback
 
-If you have any comments or suggestions, please contact the following email fake@fake.com
+If you have any comments or suggestions, please contact the following email _(in coming)_
 
 
 ## Author
 
-- [@octokatherine](https://www.github.com/octokatherine)
+- [@octokatherine](https://github.com/AlexOT03)
