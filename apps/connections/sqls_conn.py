@@ -39,7 +39,7 @@ def create_sqls_db(connection, database):
         cursor.execute(f"IF DB_ID('{database}') IS NULL CREATE DATABASE {database}")
 
 
-def check_sqls_db_exist(connection, database):
+def check_sqls_db_exist(connection, database) -> bool:
     """ Verifica si una base de datos específica existe en un servidor SQL Server.
 
     Returns:
@@ -51,4 +51,9 @@ def check_sqls_db_exist(connection, database):
 
 
 def close_sqls_conn(connection):
+    """Cierra una conexion a de una base de datos
+
+    Args:
+        connection (pyodbc.connection)
+    """
     connection.close()

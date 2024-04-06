@@ -83,7 +83,7 @@ class MainLayout(tk.Tk):
         self.exit_btn = ttk.Button(self.master_frame, text="Connect", command=self.connect_servers)
         self.exit_btn.pack(anchor='se', side='right', padx=5, pady=5)  # Alinea a la derecha
 
-        self.conn_btn = ttk.Button(self.master_frame, text="Exit", command=self.destroy)
+        self.conn_btn = ttk.Button(self.master_frame, text="Exit", command=self.on_closing)
         self.conn_btn.pack(anchor='se', side='right', padx=5, pady=5)  # Alinea a la derecha
 
 
@@ -131,6 +131,11 @@ class MainLayout(tk.Tk):
 
         self.notebook = ttk.Notebook(self.master_frame)
         self.notebook.pack(padx=10, pady=10, expand=True)
+        self.separator = ttk.Separator(self.master_frame, orient='horizontal')
+        self.separator.pack(fill='x')
+
+        self.btn_close = ttk.Button(self.master_frame, text="Exit", command=self.on_closing)
+        self.btn_close.pack(padx=10, pady=10, anchor='s', side='right')
 
         self.frame1 = ttk.Frame(self.notebook)
         self.frame1.pack(fill='both', expand=True)
@@ -170,8 +175,8 @@ class MainLayout(tk.Tk):
         self.int_console.pack(padx=10, pady=10, fill='both', expand=True)
 
         self.colums = tk.Variable()
-        self.out_table = ttk.Treeview(self.frame1, height=5, show='headings')
-        self.out_table.pack(padx=10, pady=(0, 10), fill='both', expand=True)
+        self.out_table = ttk.Treeview(self.frame1, height=4, show='headings')
+        self.out_table.pack(padx=10, pady=10, fill='both', expand=True)
 
         self.notebook2 = ttk.Notebook(self.frame2)
         self.notebook2.pack(padx=10, pady=10, fill='both', expand=True)

@@ -36,7 +36,7 @@ def create_mysql_db(connection, database:str):
         cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database}")
 
 
-def check_mysql_db_exist(connection, database:str):
+def check_mysql_db_exist(connection, database:str) -> bool:
     """ Verifica si una base de datos específica existe en un servidor MySQL.
 
     Returns:
