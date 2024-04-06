@@ -8,7 +8,6 @@ class MigrationConfirmationWindow(tk.Toplevel):
         super().__init__(parent)
         self.parent = parent
         self.title("Confirmacion")
-        self.iconbitmap("img/dark_icon.ico")
         self.resizable(False, False)
         
         self.title = tk.Label(self, text="Database migration confirmation", font=("Arial", 14))
