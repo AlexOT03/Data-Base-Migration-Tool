@@ -33,7 +33,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd DataWise-Migrator
+  cd DataWise-Migrator-Tool
 ```
 
 Install dependencies
@@ -51,6 +51,12 @@ Start the main.py file
 ## Download
 
 In the project, go to the production folder, inside this you will find the compiled application in zip format ready for download.
+To download the application follow the next steeps.
+
+ - In the project, go to the production folder in Github
+ - Enter in the "with_console" folder
+ - inside this you will find the .zip files for each version.
+ - Click on the most recent version and download it
 
 
 ## Lessons Learned
