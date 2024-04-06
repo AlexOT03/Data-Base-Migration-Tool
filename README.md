@@ -27,7 +27,7 @@ DataWise Migrator Tool is an advanced application designed to facilitate migrati
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/AlexOT03/Data-Base-Migration-Tool.git
 ```
 
 Go to the project directory
