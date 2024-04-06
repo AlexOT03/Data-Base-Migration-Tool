@@ -69,4 +69,4 @@ If you have any comments or suggestions, please contact the following email _(in
 
 ## Author
 
-- [@octokatherine](https://github.com/AlexOT03)
+- [@AlexOT03](https://github.com/AlexOT03)
