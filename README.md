@@ -53,10 +53,13 @@ Start the main.py file
 In the project, go to the production folder, inside this you will find the compiled application in zip format ready for download.
 To download the application follow the next steeps.
 
- - In the project, go to the production folder in Github
- - Enter in the "with_console" folder
- - inside this you will find the .zip files for each version.
- - Click on the most recent version and download it
+ 1. In the project, go to the [_production_](https://github.com/AlexOT03/Data-Base-Migration-Tool/tree/master/production) folder in Github
+
+ 2. Enter in the [_with console_](https://github.com/AlexOT03/Data-Base-Migration-Tool/tree/master/production/with_console) folder
+
+ 3. inside this you will find the .zip files for each version.
+
+ 4. Click on the most recent version and [_Download_](https://github.com/AlexOT03/Data-Base-Migration-Tool/blob/master/production/with_console/DataWise_Migration_Tool-v0.0.5C.zip) it
 
 
 ## Lessons Learned
