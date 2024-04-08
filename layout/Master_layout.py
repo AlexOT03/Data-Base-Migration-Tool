@@ -149,13 +149,13 @@ class MainLayout(tk.Tk):
         self.dbs_frame.pack()
 
         self.sqls_label = ttk.LabelFrame(self.dbs_frame, text="SQL Server")
-        self.sqls_label.grid(row=2, column=0, padx=(10, 0), pady=10)
+        self.sqls_label.grid(row=2, column=0, padx=(10, 0), pady=10, sticky='ew')
         self.tree_sql = ttk.Treeview(self.sqls_label, height=5)
         self.tree_sql.heading("#0", text="Databases", anchor=tk.W)
         self.tree_sql.pack(expand=True, fill=tk.BOTH, padx=10, pady=10)
 
         self.mysql_label = ttk.LabelFrame(self.dbs_frame, text="MySQL")
-        self.mysql_label.grid(row=2, column=1, padx=10, pady=10)
+        self.mysql_label.grid(row=2, column=1, padx=10, pady=10, sticky='ew')
         self.tree_mysql = ttk.Treeview(self.mysql_label,  height=5)
         self.tree_mysql.heading("#0", text="Databases", anchor=tk.W)
         self.tree_mysql.pack(expand=True, fill=tk.BOTH, padx=10, pady=10)
@@ -163,21 +163,25 @@ class MainLayout(tk.Tk):
         self.select_sql_dbs(self.sqls_connect)
         self.select_mysql_dbs(self.mysql_connect)
 
+        self.labelframe_query = ttk.LabelFrame(self.frame1, text="Run Query")
+        self.labelframe_query.pack(padx=10, pady=10)
+
         self.dbs_var = tk.StringVar(value="SQL Server")
         self.dbs = ["SQL Server", "MySQL"]
-        self.server_dbs = tk.OptionMenu(self.frame1, self.dbs_var, *self.dbs)
+        self.server_dbs = tk.OptionMenu(self.labelframe_query, self.dbs_var, *self.dbs)
         self.server_dbs.pack(padx=10, pady=10)
 
-        self.run_btn = ttk.Button(self.frame1, text="Run", command=self.run_query)
+        self.run_btn = ttk.Button(self.labelframe_query, text="Run", command=self.run_query)
         self.run_btn.pack(padx=10, pady=10)
 
-        self.int_console = tk.Text(self.frame1, height=3)
+        self.int_console = tk.Text(self.labelframe_query, height=3)
         self.int_console.pack(padx=10, pady=10, fill='both', expand=True)
 
         self.colums = tk.Variable()
-        self.out_table = ttk.Treeview(self.frame1, height=4, show='headings')
+        self.out_table = ttk.Treeview(self.labelframe_query, height=4, show='headings')
         self.out_table.pack(padx=10, pady=10, fill='both', expand=True)
 
+        # tab2 ----------------------------------------------------------------
         self.notebook2 = ttk.Notebook(self.frame2)
         self.notebook2.pack(padx=10, pady=10, fill='both', expand=True)
 
