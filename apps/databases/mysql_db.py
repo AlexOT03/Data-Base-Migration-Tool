@@ -141,7 +141,7 @@ def add_foreign_keys(sqls_conn, mysql_conn, database:str):
             print(f"Error al agregar claves foráneas a la tabla {table}: {e}")
 
 
-def migrate_to_sql_server_process(sqls_conn, mysql_conn, database, tables):
+def migrate_to_sql_server_process(sqls_conn, mysql_conn, database, tables, parent):
     """Proceso de migracion una base de datos SQL Server a MySQL
     """
     try:

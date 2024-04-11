@@ -147,9 +147,13 @@ def transfer_data(sqls_conn, mysql_conn, database:str, table:str, columns:list):
         mysql_conn.commit()
 
 
-def migrate_db_to_mysql(sqls_conn, mysql_conn, database:str, tables):
+def migrate_db_to_mysql(sqls_conn, mysql_conn, database:str, tables, progress_window):
     """ Migra una base de datos completa de SQL Server a MySQL. Recupera las tablas de la base de datos de SQL Server, luego para cada tabla, recupera su estructura, convierte los tipos de datos de SQL Server a los tipos de datos equivalentes de MySQL, crea la tabla en MySQL y transfiere los datos.
     """
+    total_tasks = len(tables)
+    progress_per_task = 100 / total_tasks
+    progress = 0
+
     if tables:
         sqls_tables = tables
     else:
@@ -162,31 +166,40 @@ def migrate_db_to_mysql(sqls_conn, mysql_conn, database:str, tables):
             new_structure = convert_sql_server_to_mysql_data_types(columns)
             create_mysql_table(mysql_conn, database, table, new_structure, primary_key)
             transfer_data(sqls_conn, mysql_conn, database, table, new_structure)
+            progress += progress_per_task
+            progress_window.bar1['value'] = progress
+            progress_window.update_idletasks()
         except Exception as e:
             print(f"Error al migrar la tabla {table}: {e}")
 
 
-def add_foreign_keys(sqls_conn, mysql_conn, database:str):
+def add_foreign_keys(sqls_conn, mysql_conn, database:str, progress_window):
     """ Agrega claves foráneas a todas las tablas en una base de datos MySQL específica. Para cada tabla, recupera las claves foráneas de la tabla correspondiente en SQL Server y luego las agrega a la tabla en MySQL.
     """
-
     mysql_tables = get_mysql_tables(mysql_conn, database)
+
+    total_tasks = len(mysql_tables)
+    progress_per_task = 100 / total_tasks
+    progress = 0
     
     for table in mysql_tables:
         try:
             print(f"┕> Transfiriendo llaves foraneas a la tabla: {table}")
             _, _, foreign_keys = get_sql_server_table_structure(sqls_conn, table)
             add_foreign_keys_to_table(mysql_conn, table, foreign_keys)
+            progress += progress_per_task
+            progress_window.bar2['value'] = progress
+            progress_window.update_idletasks()
         except Exception as e:
             print(f"Error al agregar claves foráneas a la tabla {table}: {e}")
 
 
-def migrate_to_mysql_process(sqls_conn, mysql_conn, database, tables):
+def migrate_to_mysql_process(sqls_conn, mysql_conn, database, tables, progress_window):
     """Proceso de migracion una base de datos SQL Server a MySQL
     """
     try:
-        migrate_db_to_mysql(sqls_conn, mysql_conn, database, tables)
-        add_foreign_keys(sqls_conn, mysql_conn, database)
+        migrate_db_to_mysql(sqls_conn, mysql_conn, database, tables, progress_window)
+        add_foreign_keys(sqls_conn, mysql_conn, database, progress_window)
         print("Migración completada con éxito.")
 
     except Exception as e:

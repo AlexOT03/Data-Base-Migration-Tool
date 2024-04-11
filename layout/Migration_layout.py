@@ -2,12 +2,14 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from util.Tooltip_util import Tooltip
 from apps.databases import sqls_db, mysql_db
+import time
 
 class MigrationConfirmationWindow(tk.Toplevel):
     def __init__(self, parent, database, tables, sqls_connect, mysql_connect, db_status, type):
         super().__init__(parent)
         self.parent = parent
         self.title("Confirmacion")
+        # self.attributes('-topmost', True)
         self.resizable(False, False)
         
         self.title = tk.Label(self, text="Database migration confirmation", font=("Arial", 14))
@@ -42,6 +44,21 @@ class MigrationConfirmationWindow(tk.Toplevel):
         self.separator = ttk.Separator(self, orient='horizontal')
         self.separator.pack(fill='x')
 
+        title_label1 = tk.Label(self, text="Passing data to tables")
+        title_label1.pack(padx=10, pady=10, anchor='w')
+
+        self.bar1 = ttk.Progressbar(self, orient='horizontal', length=500)
+        self.bar1.pack(padx=0, pady=(0, 20))
+
+        title_label2 = tk.Label(self, text="Creating foreignkeys")
+        title_label2.pack(padx=10, pady=10, anchor='w')
+
+        self.bar2 = ttk.Progressbar(self, orient='horizontal', length=500)
+        self.bar2.pack(padx=0, pady=(0, 20))
+
+        self.separator = ttk.Separator(self, orient='horizontal')
+        self.separator.pack(fill='x')
+
         self.button_confirm = ttk.Button(self, text="Confirm", command=self.confirm_migration)
         self.button_confirm.pack(side='right', padx=5, pady=5)
         
@@ -67,16 +84,15 @@ class MigrationConfirmationWindow(tk.Toplevel):
         print(self.selected_tables)
         if self.type == "SQLS":
             try:
-                sqls_db.migrate_to_mysql_process(self.sqls_connect, self.mysql_connect, self.database, self.selected_tables)
+                sqls_db.migrate_to_mysql_process(self.sqls_connect, self.mysql_connect, self.database, self.selected_tables, self)
                 messagebox.showinfo("Completado", f"La migraccion de la base de datos {self.database} a MySQL fue exitosa.")
             except Exception as e:
                 messagebox.showerror("Error", f"Ocurrio un error durante la migracion de {self.database} a MySQL \n Code: {e}")
             
         elif self.type == "MySQL":
             try:
-                mysql_db.migrate_to_sql_server_process(self.sqls_connect, self.mysql_connect, self.database, self.selected_tables)
+                mysql_db.migrate_to_sql_server_process(self.sqls_connect, self.mysql_connect, self.database, self.selected_tables, self)
                 messagebox.showinfo("Completado", f"La migraccion de la base de datos {self.database} a SQL Server fue exitosa.")
             except Exception as e:
                 messagebox.showerror("Error", f"Ocurrio un error durante la migracion de {self.database} a SQL Server \n Code: {e}")
-        
-        self.destroy()
+        # self.destroy()

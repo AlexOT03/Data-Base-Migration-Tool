@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from multiprocessing import Process, cpu_count
-import asyncio
+from util.CenterWindow import center_window
 from layout.base.Config_base import config_window
 from apps.connections import sqls_conn, mysql_conn
 from apps.databases import sqls_db, mysql_db
@@ -12,6 +11,7 @@ class MainLayout(tk.Tk):
         super().__init__()
         config_window(self)
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
+        center_window(self)
         self.sqls_connect = None
         self.mysql_connect = None
 
@@ -118,6 +118,9 @@ class MainLayout(tk.Tk):
     
 
     def show_databases_console(self):
+        self.update_idletasks()
+        self.geometry(f"{700}x{640}")
+        center_window(self)
         self.master_frame.destroy()
         self.master_frame = tk.Frame(self)
         self.master_frame.pack(fill='both')
@@ -149,13 +152,13 @@ class MainLayout(tk.Tk):
         self.dbs_frame.pack()
 
         self.sqls_label = ttk.LabelFrame(self.dbs_frame, text="SQL Server")
-        self.sqls_label.grid(row=2, column=0, padx=(10, 0), pady=10, sticky='ew')
+        self.sqls_label.grid(row=2, column=0, padx=(10, 0), pady=10)
         self.tree_sql = ttk.Treeview(self.sqls_label, height=5)
         self.tree_sql.heading("#0", text="Databases", anchor=tk.W)
         self.tree_sql.pack(expand=True, fill=tk.BOTH, padx=10, pady=10)
 
         self.mysql_label = ttk.LabelFrame(self.dbs_frame, text="MySQL")
-        self.mysql_label.grid(row=2, column=1, padx=10, pady=10, sticky='ew')
+        self.mysql_label.grid(row=2, column=1, padx=10, pady=10)
         self.tree_mysql = ttk.Treeview(self.mysql_label,  height=5)
         self.tree_mysql.heading("#0", text="Databases", anchor=tk.W)
         self.tree_mysql.pack(expand=True, fill=tk.BOTH, padx=10, pady=10)
@@ -169,17 +172,19 @@ class MainLayout(tk.Tk):
         self.dbs_var = tk.StringVar(value="SQL Server")
         self.dbs = ["SQL Server", "MySQL"]
         self.server_dbs = tk.OptionMenu(self.labelframe_query, self.dbs_var, *self.dbs)
-        self.server_dbs.pack(padx=10, pady=10)
+        self.server_dbs.grid(row=0, column=0, padx=10, pady=10)
 
         self.run_btn = ttk.Button(self.labelframe_query, text="Run", command=self.run_query)
-        self.run_btn.pack(padx=10, pady=10)
+        self.run_btn.grid(row=0, column=1, padx=10, pady=10)
 
         self.int_console = tk.Text(self.labelframe_query, height=3)
-        self.int_console.pack(padx=10, pady=10, fill='both', expand=True)
+        # self.int_console.pack(padx=10, pady=10, fill='both', expand=True)
+        self.int_console.grid(row=1, column=0, columnspan=2, padx=10, pady=(0, 10), sticky=tk.NSEW)
 
         self.colums = tk.Variable()
         self.out_table = ttk.Treeview(self.labelframe_query, height=4, show='headings')
-        self.out_table.pack(padx=10, pady=10, fill='both', expand=True)
+        # self.out_table.pack(padx=10, pady=10, fill='both', expand=True)
+        self.out_table.grid(row=2, column=0, columnspan=2, padx=10, pady=(0, 10), sticky=tk.NSEW)
 
         # tab2 ----------------------------------------------------------------
         self.notebook2 = ttk.Notebook(self.frame2)
@@ -343,11 +348,17 @@ class MainLayout(tk.Tk):
         db_type = self.dbs_var.get()
 
         if db_type == "SQL Server":
-            name_table = self.get_table_name_sqls(query, self.sqls_connect)
-            out_text = sqls_conn.sqls_query(self.sqls_connect, query)
+            try:
+                name_table = self.get_table_name_sqls(query, self.sqls_connect)
+                out_text = sqls_conn.sqls_query(self.sqls_connect, query)
+            except Exception as e:
+                messagebox.showerror("Error with SQL Server Query", f"{e}")
         elif db_type == "MySQL":
-            name_table = self.get_table_name_mysql(query, self.mysql_connect)
-            out_text = mysql_conn.mysql_query(self.mysql_connect, query)
+            try:
+                name_table = self.get_table_name_mysql(query, self.mysql_connect)
+                out_text = mysql_conn.mysql_query(self.mysql_connect, query)
+            except Exception as e:
+                messagebox.showerror("Error with MySQL Query", f"{e}")
         else:
             messagebox.showerror("Error", "No database type selected")
             return
