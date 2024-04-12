@@ -2,14 +2,13 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from util.Tooltip_util import Tooltip
 from apps.databases import sqls_db, mysql_db
-import time
+from util.CenterWindow import center_window
 
 class MigrationConfirmationWindow(tk.Toplevel):
     def __init__(self, parent, database, tables, sqls_connect, mysql_connect, db_status, type):
         super().__init__(parent)
         self.parent = parent
         self.title("Confirmacion")
-        # self.attributes('-topmost', True)
         self.resizable(False, False)
         
         self.title = tk.Label(self, text="Confirmación de la migración", font=("Arial", 14))
