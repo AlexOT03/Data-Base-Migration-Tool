@@ -59,7 +59,7 @@ To download the application follow the next steeps.
 
  3. inside this you will find the .zip files for each version.
 
- 4. Click on the most recent version and [_Download_](https://github.com/AlexOT03/Data-Base-Migration-Tool/blob/master/production/with_console/DataWise_Migration_Tool-v0.0.5C.zip) it
+ 4. Click on the most recent version and [_Download_](https://github.com/AlexOT03/Data-Base-Migration-Tool/blob/master/production/with_console/DataWise_Migration_Tool-v0.0.6C.zip) it
 
 
 ## Lessons Learned
