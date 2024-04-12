@@ -1,10 +1,12 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+# import ttkbootstrap as ttk
 from util.CenterWindow import center_window
 from layout.base.Config_base import config_window
 from apps.connections import sqls_conn, mysql_conn
 from apps.databases import sqls_db, mysql_db
 from layout.Migration_layout import MigrationConfirmationWindow
+import threading
 
 class MainLayout(tk.Tk):
     def __init__(self):
@@ -213,20 +215,6 @@ class MainLayout(tk.Tk):
         self.db_sqls = tk.OptionMenu(self.subframe1, self.dbs1_var, *self.dbs)
         self.db_sqls.pack(padx=10, pady=10)
 
-        self.label1 = tk.Label(self.subframe1, text="Elige un destino", font=('', 12, 'bold'))
-        self.label1.pack(padx=10, pady=(30, 0), anchor='w')
-
-        self.sublabel2 = tk.Label(self.subframe1, text="¿Dónde quieres copiar los datos? Puedes copiar los datos a cualquiera de los siguientes destinos.")
-        self.sublabel2.pack(padx=10, pady=(0, 10))
-
-        self.label1 = tk.Label(self.subframe1, text="Si la base de datos no existe escriba el nombre y se creará automáticamente (debe ser el mismo).")
-        self.label1.pack(padx=10, pady=10)
-
-        self.dbsMysql = mysql_conn.get_mysql_dbs(self.mysql_connect)
-        self.selected1_db = tk.StringVar(value=self.dbsMysql[0])
-        self.database_spinner = ttk.Combobox(self.subframe1, values=self.dbsMysql, textvariable=self.selected1_db)
-        self.database_spinner.pack(padx=10, pady=10)
-
         self.button_next_sql = ttk.Button(self.subframe1, text="Next", command=self.next_sqls_step)
         self.button_next_sql.pack(pady=10)
 
@@ -243,27 +231,13 @@ class MainLayout(tk.Tk):
         self.db_mysql = tk.OptionMenu(self.subframe2, self.dbs2_var, *self.dbs2)
         self.db_mysql.pack(padx=10, pady=10)
 
-        self.label1 = tk.Label(self.subframe2, text="Elige un destino", font=('', 12, 'bold'))
-        self.label1.pack(padx=10, pady=10, anchor='w')
-
-        self.sublabel2 = tk.Label(self.subframe2, text="¿Dónde quieres copiar los datos? Puedes copiar los datos a cualquiera de los siguientes destinos.")
-        self.sublabel2.pack(padx=10, pady=(0, 10))
-
-        self.label1 = tk.Label(self.subframe2, text="Si la base de datos no existe escriba el nombre y se creará automáticamente (debe ser el mismo).")
-        self.label1.pack(padx=10, pady=10)
-
-        self.dbsSqls2 = sqls_conn.get_sqls_dbs(self.sqls_connect)
-        self.selected2_db = tk.StringVar(value=self.dbsSqls2[0])
-        self.database_spinner = ttk.Combobox(self.subframe2, values=self.dbsSqls2, textvariable=self.selected2_db)
-        self.database_spinner.pack(padx=10, pady=10)
-
         self.button_next_sql = ttk.Button(self.subframe2, text="Next", command=self.next_mysql_step)
         self.button_next_sql.pack(pady=10)
     
 
     def next_sqls_step(self):
         exp_database = self.dbs1_var.get()
-        inp_database = self.selected1_db.get()
+        inp_database = self.dbs1_var.get()
 
         if exp_database == inp_database:
             db_mysql_status = mysql_conn.check_mysql_db_exist(self.mysql_connect, inp_database)
@@ -280,7 +254,7 @@ class MainLayout(tk.Tk):
 
     def next_mysql_step(self):
         exp_database = self.dbs2_var.get()
-        inp_database = self.selected2_db.get()
+        inp_database = self.dbs2_var.get()
 
         if exp_database == inp_database:
             db_sqls_status = sqls_conn.check_sqls_db_exist(self.sqls_connect, inp_database)
