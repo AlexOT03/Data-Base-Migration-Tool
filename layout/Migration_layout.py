@@ -12,10 +12,10 @@ class MigrationConfirmationWindow(tk.Toplevel):
         # self.attributes('-topmost', True)
         self.resizable(False, False)
         
-        self.title = tk.Label(self, text="Database migration confirmation", font=("Arial", 14))
+        self.title = tk.Label(self, text="Confirmación de la migración", font=("Arial", 14))
         self.title.pack(padx=20, pady=10)
 
-        self.label_confirmation = tk.Label(self, text="Please confirm the tables you want to migrate")
+        self.label_confirmation = tk.Label(self, text="Confirme las tablas que desea migrar.")
         self.label_confirmation.pack(padx=10, pady=10)
 
         self.separator = ttk.Separator(self, orient='horizontal')
@@ -24,12 +24,12 @@ class MigrationConfirmationWindow(tk.Toplevel):
         self.label_comprovation = tk.Label(self, text=db_status)
         self.label_comprovation.pack(padx=30, pady=10)
 
-        self.label_info = ttk.Label(self, text='ℹ️(hover me)')
+        self.label_info = ttk.Label(self, text='ⓘ')
         self.label_info.pack(padx=10, pady=10)
 
-        self.tooltip = Tooltip(self.label_info, "Selecting the tables manually \n will prevent foreign keys \n from being migrated")
+        self.tooltip = Tooltip(self.label_info, "Seleccionar las tablas manualmente\nevitará que se migren claves externas ")
         
-        self.label_frame = ttk.LabelFrame(self, text=f"Tables of database {database}:")
+        self.label_frame = ttk.LabelFrame(self, text=f"Tablas de {database}:")
         self.label_frame.pack(padx=10, pady=10, fill='both')
         
         self.selected_tables = []
@@ -44,13 +44,13 @@ class MigrationConfirmationWindow(tk.Toplevel):
         self.separator = ttk.Separator(self, orient='horizontal')
         self.separator.pack(fill='x')
 
-        title_label1 = tk.Label(self, text="Passing data to tables")
+        title_label1 = tk.Label(self, text="Creando tablas y transfiriendo datos.")
         title_label1.pack(padx=10, pady=10, anchor='w')
 
         self.bar1 = ttk.Progressbar(self, orient='horizontal', length=500)
         self.bar1.pack(padx=0, pady=(0, 20))
 
-        title_label2 = tk.Label(self, text="Creating foreignkeys")
+        title_label2 = tk.Label(self, text="Obteniendo claves foráneas y agregandolas a las tablas")
         title_label2.pack(padx=10, pady=10, anchor='w')
 
         self.bar2 = ttk.Progressbar(self, orient='horizontal', length=500)
@@ -95,4 +95,4 @@ class MigrationConfirmationWindow(tk.Toplevel):
                 messagebox.showinfo("Completado", f"La migraccion de la base de datos {self.database} a SQL Server fue exitosa.")
             except Exception as e:
                 messagebox.showerror("Error", f"Ocurrio un error durante la migracion de {self.database} a SQL Server \n Code: {e}")
-        # self.destroy()
+        self.destroy()
