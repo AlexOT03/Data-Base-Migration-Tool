@@ -59,10 +59,10 @@ class MigrationConfirmationWindow(tk.Toplevel):
         self.separator = ttk.Separator(self, orient='horizontal')
         self.separator.pack(fill='x')
 
-        self.button_confirm = ttk.Button(self, text="Confirm", command=self.confirm_migration)
+        self.button_confirm = ttk.Button(self, text="Confirmar", command=self.confirm_migration)
         self.button_confirm.pack(side='right', padx=5, pady=5)
         
-        self.button_cancel = ttk.Button(self, text="Cancel", command=self.destroy)
+        self.button_cancel = ttk.Button(self, text="Cancelar", command=self.destroy)
         self.button_cancel.pack(side='right', padx=5, pady=5)
         
         self.database = database

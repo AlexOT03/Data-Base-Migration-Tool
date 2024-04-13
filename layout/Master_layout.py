@@ -84,10 +84,10 @@ class MainLayout(tk.Tk):
         self.separator = ttk.Separator(self.master_frame, orient='horizontal')
         self.separator.pack(anchor='s', fill='x')
 
-        self.exit_btn = ttk.Button(self.master_frame, text="Connect", command=self.connect_servers)
+        self.exit_btn = ttk.Button(self.master_frame, text="Conectar", command=self.connect_servers)
         self.exit_btn.pack(anchor='se', side='right', padx=5, pady=5)  # Alinea a la derecha
 
-        self.conn_btn = ttk.Button(self.master_frame, text="Exit", command=self.on_closing)
+        self.conn_btn = ttk.Button(self.master_frame, text="Salir", command=self.on_closing)
         self.conn_btn.pack(anchor='se', side='right', padx=5, pady=5)  # Alinea a la derecha
 
 
@@ -141,7 +141,7 @@ class MainLayout(tk.Tk):
         self.separator = ttk.Separator(self.master_frame, orient='horizontal')
         self.separator.pack(fill='x')
 
-        self.btn_close = ttk.Button(self.master_frame, text="Exit", command=self.on_closing)
+        self.btn_close = ttk.Button(self.master_frame, text="Salir", command=self.on_closing)
         self.btn_close.pack(padx=10, pady=10, anchor='s', side='right')
 
         self.frame1 = ttk.Frame(self.notebook)
@@ -215,7 +215,7 @@ class MainLayout(tk.Tk):
         self.db_sqls = tk.OptionMenu(self.subframe1, self.dbs1_var, *self.dbs)
         self.db_sqls.pack(padx=10, pady=10)
 
-        self.button_next_sql = ttk.Button(self.subframe1, text="Next", command=self.next_sqls_step)
+        self.button_next_sql = ttk.Button(self.subframe1, text="Siguiente", command=self.next_sqls_step)
         self.button_next_sql.pack(pady=10)
 
         # mysql migration part -------------------------------------------------------------------------------
@@ -231,7 +231,7 @@ class MainLayout(tk.Tk):
         self.db_mysql = tk.OptionMenu(self.subframe2, self.dbs2_var, *self.dbs2)
         self.db_mysql.pack(padx=10, pady=10)
 
-        self.button_next_sql = ttk.Button(self.subframe2, text="Next", command=self.next_mysql_step)
+        self.button_next_sql = ttk.Button(self.subframe2, text="Siguiente", command=self.next_mysql_step)
         self.button_next_sql.pack(pady=10)
     
 
